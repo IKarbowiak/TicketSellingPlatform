@@ -12,3 +12,4 @@ class Reservation(models.Model):
     ]
 
     status = models.CharField(max_length=20, choices=RESERVATION_STATUS_CHOICES, default=BOOKED)
+    booked_time = models.DateTimeField(auto_now_add=True)
