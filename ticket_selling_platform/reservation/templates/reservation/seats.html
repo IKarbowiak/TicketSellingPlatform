@@ -20,7 +20,7 @@
                         {% elif type.type == 'VIP' %}vip
                         {% else %}regular
                         {% endif %}"
-                               value={{type.type|slice:"1"}}{{ticket.seat_number}} onclick="changeclass(this)">
+                               value={{ticket.seat_identifier}} onclick="changeclass(this)">
                     </div>
                 </td>
                 {% endfor %}

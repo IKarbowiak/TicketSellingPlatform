@@ -1,24 +1,21 @@
 from django import forms
-
-from .models import Reservation
-from ticket.models import Ticket
+from django.core.exceptions import ValidationError
 
 
 class ReservationForm(forms.Form):
-    def __init__(self,*args,**kwargs):
-        print(args)
-        print(kwargs)
-        self.tickets = {ticket['type']: ticket['total'] for ticket in kwargs.pop('free_tickets')}
-        print(self.tickets)
-        super(ReservationForm, self).__init__(*args,**kwargs)
-        self.fields['regular_tickets'] = forms.IntegerField(min_value=0, max_value=self.tickets.get('REGULAR', 0),
-                                                                   initial=0)
-        self.fields['premium_tickets'] = forms.IntegerField(min_value=0, max_value=self.tickets.get('PREMIUM', 0),
-                                                            initial=0)
-        self.fields['vip_tickets'] = forms.IntegerField(min_value=0, max_value=self.tickets.get('VIP', 0),
-                                                            initial=0)
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super(ReservationForm, self).__init__(*args, **kwargs)
 
-    regular_tickets = forms.IntegerField(min_value=0, initial=0)
-    vip_tickets = forms.IntegerField(min_value=0, initial=0)
-    premium_tickets = forms.IntegerField(min_value=0, initial=0)
+    chosen_seats = forms.CharField(label='Chosen seats', max_length=100)
 
+    def clean_chosen_seats(self):
+        chosen_seats = self.cleaned_data['chosen_seats']
+        chosen_seats_set = set(chosen_seats.split(', '))
+        available_tickets = set(self.event.get_all_tickets().filter(reservation__isnull=True)\
+            .values_list('seat_identifier', flat=True).distinct())
+
+        booked_tickets = chosen_seats_set.difference(available_tickets)
+        if booked_tickets:
+            return ValidationError('Some seats are already booked: {}'.format(', '.join(booked_tickets)))
+        return chosen_seats

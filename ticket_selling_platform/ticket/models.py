@@ -23,16 +23,16 @@ class TicketType(models.Model):
 
     def create_tickets(self):
         for seat in range(1, self.seats_number + 1):
-            Ticket.objects.create(seat_number=seat, type=self)
+            Ticket.objects.create(seat_identifier='{}{}'.format(self.type[0], seat), type=self)
 
     def __str__(self):
         return '{}, {} seats'.format(self.type, self.seats_number)
 
 
 class Ticket(models.Model):
-    seat_number = models.PositiveIntegerField()
+    seat_identifier = models.CharField(max_length=10)
     reservation = models.ForeignKey(Reservation, on_delete=models.SET_NULL, null=True, related_name='tickets')
     type = models.ForeignKey(TicketType, on_delete=models.CASCADE, related_name='tickets')
 
     def __str__(self):
-        return 'SEAT: {}'.format(self.seat_number)
+        return 'SEAT: {}'.format(self.seat_identifier)
