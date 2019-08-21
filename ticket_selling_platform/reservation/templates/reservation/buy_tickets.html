@@ -3,21 +3,31 @@
 {% block title %}Buy tickets{% endblock %}
 
 {% block content %}
-<h2>{{event.name}}</h2>
-<p>{{event.description}}</p>
-Available tickets: <br>
-{% for ticket_type in free_tickets %}
-{{ticket_type.type}}: {{ticket_type.total}}
-{% endfor %}
-<form action="" method="post">
-    {{form.as_p}}
-    {% csrf_token %}
-    <input type="submit" value="OK">
-</form>
-<form action="" method="post">
-    {% include "reservation/seats.html" with ticket_types_data=tickets %}
-    <!--<input type="button" class="btn btn-warning" value=1>-->
-    {% csrf_token %}
-    <input type="submit" value="OK">
-</form>
+<div class="event-desc">
+    <h2 class="event-title">{{event.name}}</h2>
+    <p>{{event.description}}</p>
+    <strong>Event time: </strong><p>{{event.datetime}}</p>
+    <strong>Available tickets: </strong><br>
+    {% for ticket_type in free_tickets %}
+    {{ticket_type.type}}: {{ticket_type.total}}
+    {% endfor %}
+    <div class="form">
+        <form action="" method="post">
+            <strong><label for="chosen_seats">Chosen seats: </label></strong>
+            <textarea rows="3" class="form-control" id="chosen_seats" name="chosen_seats" readonly>
+            </textarea>
+            <strong><label for="tickets_counter">Tickets amount: </label></strong>
+            <input id="tickets_counter" type="text" value="0" readonly>
+            {% csrf_token %}
+            <input class="submit-button" type="submit" value="OK">
+        </form>
+    </div>
+</div>
+<!--<form action="" method="post">-->
+    <!--{{form.as_p}}-->
+    <!--{% csrf_token %}-->
+    <!--<input type="submit" value="OK">-->
+<!--</form>-->
+{% include "reservation/seats.html" with ticket_types_data=tickets %}
+
 {% endblock %}

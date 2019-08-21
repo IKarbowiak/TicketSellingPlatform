@@ -13,6 +13,17 @@ body {
     margin-top: 5%;
 }
 
+.event-desc {
+    float: left;
+}
+
+.form {
+    margin-top: 5%;
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+}
+
 .pagination {
     margin-top: 2%;
     display: flex;
@@ -23,6 +34,10 @@ body {
 svg {
     display: block;
     margin: auto;
+}
+
+.form {
+
 }
 
 .ticket_info {
@@ -68,6 +83,14 @@ svg {
 .chosen {
     background-color: green !important;
     border-color: green;
+}
+
+.event-title {
+    /*text-align: center;*/
+}
+
+.submit-button {
+
 }
 
 p {
