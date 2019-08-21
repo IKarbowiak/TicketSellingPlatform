@@ -8,9 +8,9 @@
 Available tickets: <br>
 {% for ticket_type in free_tickets %}
 {{ticket_type.type}}: {{ticket_type.total}}
+{% endfor %}
 <form action="" method="post">
     {{form.as_p}}
     <input type="submit" value="OK">
 </form>
-{% endfor %}
 {% endblock %}

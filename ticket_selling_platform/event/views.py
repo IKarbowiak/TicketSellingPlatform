@@ -9,8 +9,9 @@ from .models import Event
 
 
 class EventListView(ListView):
-    queryset = Event.objects.filter(datetime__gte=timezone.now() - timedelta(days=1)) \
-        .annotate(available_tickets=Count('tickets', distinct=True, filter=Q(tickets__reservation__isnull=True)))
+    queryset = Event.objects.filter(datetime__gte=timezone.now() - timedelta(days=5)) \
+        .annotate(available_tickets=Count('ticket_types__tickets', distinct=True,
+                                          filter=Q(ticket_types__tickets__reservation__isnull=True)))
     context_object_name = 'events'
     paginate_by = 4
     template_name = 'event/events_list.html'
