@@ -11,6 +11,13 @@ Available tickets: <br>
 {% endfor %}
 <form action="" method="post">
     {{form.as_p}}
+    {% csrf_token %}
+    <input type="submit" value="OK">
+</form>
+<form action="" method="post">
+    {% include "reservation/seats.html" with ticket_types_data=tickets %}
+    <!--<input type="button" class="btn btn-warning" value=1>-->
+    {% csrf_token %}
     <input type="submit" value="OK">
 </form>
 {% endblock %}

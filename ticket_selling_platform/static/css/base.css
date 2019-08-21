@@ -20,6 +20,56 @@ body {
     justify-content: center;
 }
 
+svg {
+    display: block;
+    margin: auto;
+}
+
+.ticket_info {
+    font-weight: bolder;
+}
+
+.seats {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+.rect {
+    stroke-width:3;
+}
+
+.seat {
+    height: 50px !important;;
+    width: 50px !important;
+}
+
+.booked {
+    background-color: darkred !important;
+    border-color: black;
+}
+
+.vip {
+    background-color: #D35400   !important;
+    border-color: #D35400   !important;
+}
+
+.premium {
+    background-color: #F39C12  !important;
+    border-color: #F39C12  !important;
+}
+
+.regular{
+    background-color: #F7DC6F !important;
+    border-color: #F7DC6F !important;
+}
+
+
+.chosen {
+    background-color: green !important;
+    border-color: green;
+}
+
 p {
     line-height: 1.8;
 }
