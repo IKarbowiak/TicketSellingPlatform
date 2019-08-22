@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Buy tickets{% endblock %}
+{% block content %}
+<div class="res-confirm-details">
+<h3>Your reservation details: </h3>
+<strong>Event: </strong> {{event.name }} <br>
+<strong>Event time: </strong> {{event.datetime }} <br>
+<strong>Event description: </strong> {{event.description}} <br>
+</div>
+<div class="payment-details">
+    <strong>Payment details: </strong>
+</div>
+<div class="col-md-6" >
+    {% include "reservation/reservation_detail.html" with tickets=details total_price=total_price %}
+</div>
+
+{% endblock %}

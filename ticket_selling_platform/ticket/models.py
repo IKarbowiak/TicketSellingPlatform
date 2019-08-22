@@ -31,7 +31,8 @@ class TicketType(models.Model):
 
 class Ticket(models.Model):
     seat_identifier = models.CharField(max_length=10)
-    reservation = models.ForeignKey(Reservation, on_delete=models.SET_NULL, null=True, related_name='tickets')
+    reservation = models.ForeignKey(Reservation, on_delete=models.SET_NULL, null=True,
+                                    related_name='tickets')
     type = models.ForeignKey(TicketType, on_delete=models.CASCADE, related_name='tickets')
 
     def __str__(self):

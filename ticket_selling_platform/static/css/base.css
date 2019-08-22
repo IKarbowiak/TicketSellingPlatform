@@ -68,6 +68,15 @@ svg {
     float: left;
 }
 
+.res-confirm-details {
+    font-size: 18px;
+    margin-bottom: 2%;
+}
+
+.payment-details {
+    font-size: 18px;
+}
+
 .reservation-detail {
     float: right;
 }
