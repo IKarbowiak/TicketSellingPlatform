@@ -36,8 +36,8 @@ svg {
     margin: auto;
 }
 
-.form {
-
+.confirm {
+    margin-top: 5%;
 }
 
 .ticket_info {
@@ -89,9 +89,6 @@ svg {
     /*text-align: center;*/
 }
 
-.submit-button {
-
-}
 
 p {
     line-height: 1.8;

@@ -13,21 +13,19 @@
     {% endfor %}
     <div class="form">
         <form action="" method="post">
+            {% csrf_token %}
             <strong><label for="chosen_seats">Chosen seats: </label></strong>
             <textarea rows="3" class="form-control" id="chosen_seats" name="chosen_seats" readonly>
             </textarea>
             <strong><label for="tickets_counter">Tickets amount: </label></strong>
             <input id="tickets_counter" type="text" value="0" readonly>
-            {% csrf_token %}
-            <input class="submit-button" type="submit" value="OK">
+            <input class="submit-button confirm" type="submit" value="Confirm">
         </form>
+        <a href="{% url "event:events" %}" class="btn btn-primary " role="button">Cancel</a>
+
     </div>
 </div>
-<!--<form action="" method="post">-->
-    <!--{{form.as_p}}-->
-    <!--{% csrf_token %}-->
-    <!--<input type="submit" value="OK">-->
-<!--</form>-->
+
 {% include "reservation/seats.html" with ticket_types_data=tickets %}
 
 {% endblock %}
