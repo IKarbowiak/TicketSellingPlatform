@@ -4,7 +4,7 @@
 <div class="seats">
     {% for type in ticket_types_data %}
     <div class="ticket_info">
-        {{type.type}}: {{type.price}} euro
+        {{type.type}}: {{type.price}} &euro;
     </div>
     <table class="panel">
         <tbody>
@@ -20,7 +20,8 @@
                         {% elif type.type == 'VIP' %}vip
                         {% else %}regular
                         {% endif %}"
-                               value={{ticket.seat_identifier}} onclick="changeclass(this)">
+                               value={{ticket.seat_identifier}} onclick="changeclass(this)"
+                        {% if ticket.reservation %}disabled{% endif %}>
                     </div>
                 </td>
                 {% endfor %}

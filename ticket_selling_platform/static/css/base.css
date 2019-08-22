@@ -59,9 +59,17 @@ svg {
     width: 50px !important;
 }
 
-.booked {
+.booked:disabled, .booked {
     background-color: darkred !important;
-    border-color: black;
+    border-color: black !important;
+}
+
+.time-left {
+    float: left;
+}
+
+.reservation-detail {
+    float: right;
 }
 
 .vip {
