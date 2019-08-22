@@ -3,14 +3,17 @@ function changeclass(element) {
     var tickets_amount = parseInt($("#tickets_counter").val());
     var seat = $(element).val();
     var new_chosen_seats_value = "";
+    var element_type = seat.charAt(0);
+    var type_counter = parseInt($(`#${element_type}`).text());
 
     if (jQuery(element).hasClass('chosen')) {
         $(element).removeClass('chosen');
         console.log("remove");
         if (chosen_seats.includes(seat)){
-            new_chosen_seats_value  = chosen_seats.replace(seat, '').replace(/,\s*$/, "");;
+            new_chosen_seats_value  = chosen_seats.replace(seat, '').replace(/,\s*$|^,/, "").replace(/,\s,\s*/, ", ");;
         }
         tickets_amount --;
+        type_counter ++;
     }
     else {
         $(element).addClass('chosen');
@@ -18,12 +21,10 @@ function changeclass(element) {
         new_chosen_seats_value = chosen_seats.trim().length == 0 ? seat : (chosen_seats + ', ' + seat);
 
         tickets_amount ++;
+        type_counter --;
     }
     $("#tickets_counter").val(tickets_amount);
     $("#chosen_seats").val(new_chosen_seats_value);
-}
-
-$(document).ready(function() {
-
-});
+    $(`#${element_type}`).text(type_counter);
+};
 

@@ -73,7 +73,7 @@ def reservation_payment(request, reservation_pk):
     reservation_time = timezone.now() - reservation.booked_time
     if reservation_time >= timedelta(minutes=15):
         reservation.delete()
-        return HttpResponseRedirect('/reservation-canceled/')
+        return HttpResponseRedirect('/reservation-canceled/{}'.format(reservation.pk))
 
     left_time = re.match(r'\d+:(\d\d:\d\d).\d+', str(timedelta(minutes=15) - reservation_time)).group(1)
     tickets, total_price = reservation.get_reservation_details()
@@ -103,7 +103,7 @@ def reservation_canceled(request, reservation_pk):
     if not reservation:
         return HttpResponseRedirect('/')
     if reservation.status == Reservation.PAID:
-        return HttpResponseRedirect('reservation-confirmation/{}'.format(reservation_pk))
+        return HttpResponseRedirect('/reservation-confirmation/{}'.format(reservation_pk))
     reservation_pk = reservation.pk
     reservation.delete()
     reservation.save()

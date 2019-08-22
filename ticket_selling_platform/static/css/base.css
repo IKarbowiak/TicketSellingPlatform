@@ -15,6 +15,8 @@ body {
 
 .event-desc {
     float: left;
+    width: 20%;
+    padding-right: 1%;
 }
 
 .form {
@@ -48,6 +50,7 @@ svg {
     display: grid;
     align-items: center;
     justify-content: center;
+
 }
 
 .rect {
