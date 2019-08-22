@@ -9,5 +9,5 @@
 <div class="col-md-6 reservation-detail" >
     {% include "reservation/reservation_detail.html" with tickets=tickets total_price=total_price %}
 </div>
-<a href="" hidden></a>
+<a id="res_canceled" href="{% url "reservation:reservation_canceled" reservation_pk=reservation.pk %}" hidden>Click</a>
 {% endblock %}
