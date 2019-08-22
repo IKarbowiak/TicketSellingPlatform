@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Reservation check{% endblock %}
+{% block content %}
+    <form lang="es" action="" method="post">
+        {{ form.as_p }}
+        <input type="submit" value="Check">
+        {%  csrf_token %}
+    </form>
+
+{% endblock %}

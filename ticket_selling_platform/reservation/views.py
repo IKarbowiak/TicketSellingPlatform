@@ -7,8 +7,8 @@ from django.http import HttpResponseRedirect
 from django.utils import timezone
 
 from event.models import Event
-from .forms import ReservationForm, check_seats_availability
-from reservation.models import Reservation
+from .forms import ReservationForm, check_seats_availability, ReservationCheckForm
+from .models import Reservation
 from ticket.models import Ticket
 
 row_length = 10
@@ -108,3 +108,14 @@ def reservation_canceled(request, reservation_pk):
     reservation.delete()
     reservation.save()
     return render(request, 'reservation/reservation_canceled.html', {'reservation_pk': reservation_pk})
+
+def reservation_check(request):
+    form = ReservationCheckForm()
+    if request.method == 'POST':
+        form = ReservationCheckForm(request.POST)
+        print(form.is_valid())
+        if form.is_valid():
+            cd = form.cleaned_data
+            reservation_pk = cd['reservation_id']
+            return HttpResponseRedirect('/reservation-confirmation/{}'.format(reservation_pk))
+    return render(request, 'reservation/reservation_check.html', {'form': form})

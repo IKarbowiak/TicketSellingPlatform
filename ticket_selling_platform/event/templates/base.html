@@ -15,6 +15,7 @@
 <body>
     <div id="header">
         <a href="/" class="logo">Event booking platform</a>
+        <a href="{% url "reservation:reservation_check" %}" class="res-check">Check your reservation</a>
     </div>
     <div class="content">
         {% block content %}
