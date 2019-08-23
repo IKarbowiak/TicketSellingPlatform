@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'event',
     'reservation',
     'ticket',
+    'paypal.standard.ipn',
     'payment',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -125,3 +126,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     '/static/',
 ]
+
+# DJANGO-PAYPAL settings
+PAYPAL_RECEIVER_EMAIL = 'sb-s2rdp29411@business.example.com'
+PAYPAL_TEST = True
+

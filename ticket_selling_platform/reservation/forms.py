@@ -42,12 +42,12 @@ class ReservationCheckForm(forms.Form):
 
     @staticmethod
     def check_email(email):
-        if not Client.objects.filter(email=email, reservation__isnull=False).exists():
+        if not Client.objects.filter(email=email, reservations__isnull=False).exists():
             raise ValidationError('Reservation for {} email address does not exist'.format(email))
 
     @staticmethod
     def check_both(reservation_id, email):
-        if not Client.objects.filter(reservation__pk=reservation_id, email=email).exists():
+        if not Client.objects.filter(reservations__pk=reservation_id, email=email).exists():
             raise ValidationError('Reservation for {} address with {} number does not exist'
                                   .format(reservation_id, email))
 

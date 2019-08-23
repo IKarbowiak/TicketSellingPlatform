@@ -1,10 +1,11 @@
 import re
 from datetime import timedelta
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count, Q, F, Sum
 from django.http import HttpResponseRedirect
 from django.utils import timezone
+from django.urls import reverse
 
 from event.models import Event
 from .forms import ReservationForm, check_seats_availability, ReservationCheckForm, ClientForm
@@ -14,8 +15,10 @@ from ticket.models import Ticket
 row_length = 10
 
 
+# TODO: exclude reservation which have status PAID => remove others
 def remove_expired_reservations():
-    Reservation.objects.filter(booked_time__lte=timezone.now() - timedelta(minutes=15)).delete()
+    Reservation.objects.filter(booked_time__lte=timezone.now() - timedelta(minutes=15),
+                               status=Reservation.BOOKED).delete()
 
 
 def prepare_seats_rows(ticket_types):
@@ -68,7 +71,11 @@ def reservation_confirm(request, reservation_pk):
     if not reservation:
         return HttpResponseRedirect('/')
     if reservation.status == Reservation.PAID:
-            return HttpResponseRedirect('/reservation-confirmation/{}'.format(reservation.id))
+        return HttpResponseRedirect('/reservation-confirmation/{}'.format(reservation.id))
+    if reservation.status == Reservation.UNPAID:
+        request.session['reservation_id'] = reservation.pk
+        return redirect(reverse('payment:process'))
+        # return HttpResponseRedirect('/payment/{}'.format(reservation.id))
 
     form = ClientForm()
     if request.method == 'POST':
@@ -83,7 +90,9 @@ def reservation_confirm(request, reservation_pk):
             reservation.client = client
             reservation.status = Reservation.UNPAID
             reservation.save()
-            return HttpResponseRedirect('/payment/{}'.format(reservation_pk))
+            request.session['reservation_id'] = reservation.pk
+            return redirect(reverse('payment:process'))
+            # return HttpResponseRedirect('/payment/{}'.format(reservation_pk))
 
     reservation_time = timezone.now() - reservation.booked_time
     if reservation_time >= timedelta(minutes=15):
@@ -145,5 +154,6 @@ def reservation_check(request):
 
 def get_client_reservations(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
-    return render(request, 'reservation/client_reservations.html', {'client': client})
+    reservations = client.reservations.all()
+    return render(request, 'reservation/client_reservations.html', {'reservations': reservations})
 

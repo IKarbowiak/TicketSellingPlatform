@@ -1,6 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %}Buy tickets{% endblock %}
+{% block title %}Your reservations{% endblock %}
 {% block content %}
-{{client}}
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Event</th>
+            <th scope="col">Tickets amount</th>
+            <th scope="col">Reservation status</th>
+            <th scope="col">Go to reservation details</th>
+        </tr>
+        </thead>
+        <tbody>
+        {%  for reservation in reservations %}
+            <tr>
+                <td>Name</td>
+                <td>{{reservation.tickets.count}}</td>
+                <td>{{ reservation.status }}</td>
+                <td><a href="{{ reservation.get_absolute_url }}">See reservation</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

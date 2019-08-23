@@ -4,5 +4,7 @@ from . import views
 
 
 urlpatterns = [
-    path('<int:reservation_pk>/', views.payment_view, name='payment'),
+    path('process/', views.payment_process, name='process'),
+    path('done/', views.payment_done, name='done'),
+    path('canceled/', views.payment_canceled, name='canceled'),
 ]

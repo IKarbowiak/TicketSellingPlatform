@@ -21,9 +21,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('payment/', include(('payment.urls', 'payment'), namespace='payment')),
+    path('paypal/', include('paypal.standard.ipn.urls')),
     path('', include(('event.urls', 'event'), namespace='event')),
     path('', include(('reservation.urls', 'reservation'), namespace='reservation')),
-    path('payment/', include(('payment.urls', 'payment'), namespace='payment')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # if settings.DEBUG:
