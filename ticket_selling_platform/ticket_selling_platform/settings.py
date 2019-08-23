@@ -24,7 +24,7 @@ SECRET_KEY = 'myynflbz^cr*1vb9(wuqyvv7)d+9@&#dv5704d$0s7qcy1q0f_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['2370566f.ngrok.io', '127.0.0.1']
 
 
 # Application definition
@@ -130,4 +130,5 @@ STATICFILES_DIRS = [
 # DJANGO-PAYPAL settings
 PAYPAL_RECEIVER_EMAIL = 'sb-s2rdp29411@business.example.com'
 PAYPAL_TEST = True
+
 

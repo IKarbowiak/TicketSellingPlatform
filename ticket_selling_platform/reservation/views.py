@@ -75,7 +75,6 @@ def reservation_confirm(request, reservation_pk):
     if reservation.status == Reservation.UNPAID:
         request.session['reservation_id'] = reservation.pk
         return redirect(reverse('payment:process'))
-        # return HttpResponseRedirect('/payment/{}'.format(reservation.id))
 
     form = ClientForm()
     if request.method == 'POST':
@@ -92,7 +91,6 @@ def reservation_confirm(request, reservation_pk):
             reservation.save()
             request.session['reservation_id'] = reservation.pk
             return redirect(reverse('payment:process'))
-            # return HttpResponseRedirect('/payment/{}'.format(reservation_pk))
 
     reservation_time = timezone.now() - reservation.booked_time
     if reservation_time >= timedelta(minutes=15):

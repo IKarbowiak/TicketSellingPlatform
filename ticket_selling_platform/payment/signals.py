@@ -7,11 +7,12 @@ from reservation.models import Reservation
 
 def payment_notification(sender, **kwargs):
     ipn_obj = sender
+    print("Payment notification")
     print(ipn_obj.payment_status)
     if ipn_obj.payment_status == ST_PP_COMPLETED:
         # payment finished with success
-        order = get_object_or_404(Reservation, id=ipn_obj.invoice)
-        order.paid = True
-        order.save()
+        reservation = get_object_or_404(Reservation, id=ipn_obj.invoice)
+        reservation.status = Reservation.PAID
+        reservation.save()
 
 valid_ipn_received.connect(payment_notification)
