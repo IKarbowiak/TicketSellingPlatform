@@ -43,11 +43,11 @@ def choose_tickets_panel(request, event_pk):
         form = ReservationForm(request.POST, event=event)
         if form.is_valid():
             cd = form.cleaned_data
-            print(cd)
+            email = cd['email']
             # double check if seats are still free
             taken_seats = check_seats_availability(cd, event)
             if not taken_seats:
-                reservation = Reservation.objects.create()
+                reservation = Reservation.objects.create(email=email)
                 seats_identifiers = cd['chosen_seats'].split(', ')
                 Ticket.objects.filter(seat_identifier__in=seats_identifiers)\
                     .update(reservation=reservation)

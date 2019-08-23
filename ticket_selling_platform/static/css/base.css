@@ -181,8 +181,10 @@ input, textarea {
     border:0;
     padding:6px 10px;
     font-size:14px;
-    width: inherit;
 }
+
+
+
 input[type=submit], a.button {
     font-weight:bold;
     background:#12c064;
@@ -220,6 +222,7 @@ p label {
     color: black;
 }
 
-#tickets_counter {
-    width: 100%;
+
+.errorlist {
+    color: red;
 }

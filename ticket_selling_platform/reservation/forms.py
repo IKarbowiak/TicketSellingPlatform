@@ -20,7 +20,8 @@ class ReservationForm(forms.Form):
         super(ReservationForm, self).__init__(*args, **kwargs)
 
     chosen_seats = forms.CharField(label='Chosen seats', max_length=100,
-                                   widget=forms.Textarea(attrs={'rows': 2, 'readonly': True}))
+                                   widget=forms.Textarea(attrs={'rows': 2, 'readonly': True,
+                                                                'style':'width:100%'}))
     email = forms.EmailField()
 
     def clean_chosen_seats(self):
@@ -32,12 +33,37 @@ class ReservationForm(forms.Form):
 
 
 class ReservationCheckForm(forms.Form):
-    reservation_id = forms.IntegerField(min_value=0, error_messages={'empty': 'Fill this field'})
+    reservation_id = forms.IntegerField(min_value=0, error_messages={'empty': 'Fill this field'}, required=False)
+    email = forms.EmailField(required=False)
 
-    def clean_reservation_id(self):
-        reservation_id = self.cleaned_data['reservation_id']
-        print(reservation_id)
+    @staticmethod
+    def check_reservation_id(reservation_id):
         if not Reservation.objects.filter(pk=reservation_id).exists():
-            raise ValidationError('Reservation does not exist')
-        return reservation_id
+            raise ValidationError('Reservation with number {} does not exist'.format(reservation_id))
 
+    @staticmethod
+    def check_email(email):
+        if not Reservation.objects.filter(email=email).exists():
+            raise ValidationError('Reservation for {} email address does not exist'.format(email))
+
+    @staticmethod
+    def check_both(reservation_id, email):
+        if not Reservation.objects.filter(pk=reservation_id, email=email).exists():
+            raise ValidationError('Reservation for {} address with {} number does not exist'
+                                  .format(reservation_id, email))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        res_id = cleaned_data['reservation_id']
+        email = cleaned_data['email']
+
+        if not res_id and not email:
+            raise ValidationError("Fill at least one field")
+        elif res_id and not email:
+            self.check_reservation_id(res_id)
+        elif email and not res_id:
+            self.check_email(email)
+        else:
+            self.check_both(res_id, email)
+
+        return cleaned_data
