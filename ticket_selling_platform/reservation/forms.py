@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import Reservation
+from .models import Reservation, Client
 
 
 def check_seats_availability(cleaned_data, event):
@@ -21,8 +21,7 @@ class ReservationForm(forms.Form):
 
     chosen_seats = forms.CharField(label='Chosen seats', max_length=100,
                                    widget=forms.Textarea(attrs={'rows': 2, 'readonly': True,
-                                                                'style':'width:100%'}))
-    email = forms.EmailField()
+                                                                'style': 'width:100%'}))
 
     def clean_chosen_seats(self):
         chosen_seats = self.cleaned_data['chosen_seats']
@@ -43,12 +42,12 @@ class ReservationCheckForm(forms.Form):
 
     @staticmethod
     def check_email(email):
-        if not Reservation.objects.filter(email=email).exists():
+        if not Client.objects.filter(email=email, reservation__isnull=False).exists():
             raise ValidationError('Reservation for {} email address does not exist'.format(email))
 
     @staticmethod
     def check_both(reservation_id, email):
-        if not Reservation.objects.filter(pk=reservation_id, email=email).exists():
+        if not Client.objects.filter(reservation__pk=reservation_id, email=email).exists():
             raise ValidationError('Reservation for {} address with {} number does not exist'
                                   .format(reservation_id, email))
 
@@ -67,3 +66,9 @@ class ReservationCheckForm(forms.Form):
             self.check_both(res_id, email)
 
         return cleaned_data
+
+
+class ClientForm(forms.Form):
+    first_name = forms.CharField(max_length=50)
+    last_name = forms.CharField(max_length=50)
+    email = forms.EmailField()

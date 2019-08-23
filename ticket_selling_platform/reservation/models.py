@@ -3,6 +3,12 @@ from django.db.models import Count, Q, F, Sum
 from functools import reduce
 
 
+class Client(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
+
+
 class Reservation(models.Model):
     PAID = 'PAID'
     UNPAID = 'UNPAID'
@@ -15,7 +21,7 @@ class Reservation(models.Model):
 
     status = models.CharField(max_length=20, choices=RESERVATION_STATUS_CHOICES, default=BOOKED)
     booked_time = models.DateTimeField(auto_now_add=True)
-    email = models.EmailField()
+    client = models.ForeignKey(Client, null=True, on_delete=models.CASCADE, related_name='reservation')
 
     def get_reservation_details(self):
         reservation_details = self.tickets.all() \
