@@ -33,17 +33,9 @@ body {
     justify-content: center;
 }
 
-.res-check {
-
-}
-
 svg {
     display: block;
     margin: auto;
-}
-
-.confirm {
-    margin-top: 5%;
 }
 
 .ticket_info {
@@ -118,12 +110,6 @@ svg {
     margin-right: 10%;
 }
 
-
-.event-title {
-    /*text-align: center;*/
-}
-
-
 p {
     line-height: 1.8;
 }
@@ -191,11 +177,11 @@ label {
 input, textarea {
     clear:both;
     float:left;
-    margin:0 0 10px;
     background:#efefef;
     border:0;
     padding:6px 10px;
     font-size:14px;
+    width: inherit;
 }
 input[type=submit], a.button {
     font-weight:bold;
@@ -204,4 +190,36 @@ input[type=submit], a.button {
     padding:10px 20px;
     font-size:14px;
     text-transform:uppercase;
+}
+
+.confirm, .cancel {
+    margin-top: 5%;
+}
+
+.confirm {
+    float: right;
+}
+
+a.cancel {
+    font-weight:bold;
+    background:#909090;
+    border: #909090;
+    color:#fff;
+    padding:10px 20px;
+    font-size:14px;
+    text-transform:uppercase;
+    float: left;
+}
+
+
+p label {
+    font-weight: bold;;
+}
+
+.btn:hover {
+    color: black;
+}
+
+#tickets_counter {
+    width: 100%;
 }

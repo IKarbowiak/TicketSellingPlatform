@@ -19,7 +19,9 @@ class ReservationForm(forms.Form):
         self.event = kwargs.pop('event')
         super(ReservationForm, self).__init__(*args, **kwargs)
 
-    chosen_seats = forms.CharField(label='Chosen seats', max_length=100)
+    chosen_seats = forms.CharField(label='Chosen seats', max_length=100,
+                                   widget=forms.Textarea(attrs={'rows': 2, 'readonly': True}))
+    email = forms.EmailField()
 
     def clean_chosen_seats(self):
         chosen_seats = self.cleaned_data['chosen_seats']

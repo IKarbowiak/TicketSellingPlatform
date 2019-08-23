@@ -1,5 +1,5 @@
 function changeclass(element) {
-    var chosen_seats = $("#chosen_seats").val();
+    var chosen_seats = $("#id_chosen_seats").val();
     var tickets_amount = parseInt($("#tickets_counter").val());
     var seat = $(element).val();
     var new_chosen_seats_value = "";
@@ -24,7 +24,7 @@ function changeclass(element) {
         type_counter --;
     }
     $("#tickets_counter").val(tickets_amount);
-    $("#chosen_seats").val(new_chosen_seats_value);
+    $("#id_chosen_seats").val(new_chosen_seats_value);
     $(`#${element_type}`).text(type_counter);
 };
 

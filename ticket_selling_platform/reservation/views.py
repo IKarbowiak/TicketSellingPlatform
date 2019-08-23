@@ -59,7 +59,7 @@ def choose_tickets_panel(request, event_pk):
         .annotate(total=Count('tickets', distinct=True, filter=Q(tickets__reservation__isnull=True)))
 
     ticket_types_data = prepare_seats_rows(event.ticket_types.all())
-
+    print(form)
     return render(request, 'reservation/buy_tickets.html', {'event': event, 'free_tickets': free_tickets,
                                                             'form': form, 'tickets': ticket_types_data})
 

@@ -5,7 +5,6 @@
 {% block content %}
 <div class="event-desc">
     <h2 class="event-title">{{event.name}}</h2>
-    <p>{{event.description}}</p>
     <strong>Event time: </strong><p>{{event.datetime}}</p>
     <strong>Available tickets: </strong><br>
     {% for ticket_type in free_tickets %}
@@ -14,14 +13,12 @@
     <div class="form">
         <form action="" method="post">
             {% csrf_token %}
-            <strong><label for="chosen_seats">Chosen seats: </label></strong>
-            <textarea rows="3" class="form-control" id="chosen_seats" name="chosen_seats" readonly>
-            </textarea>
+            {{form.as_p}}
             <strong><label for="tickets_counter">Tickets amount: </label></strong>
             <input id="tickets_counter" type="text" value="0" readonly>
-            <input class="submit-button confirm" type="submit" value="Confirm">
+            <input class="btn submit-button confirm" type="submit" value="Confirm">
+            <a href="{% url "event:events" %}" class="btn cancel" role="button">Cancel</a>
         </form>
-        <a href="{% url "event:events" %}" class="btn btn-primary " role="button">Cancel</a>
 
     </div>
 </div>
