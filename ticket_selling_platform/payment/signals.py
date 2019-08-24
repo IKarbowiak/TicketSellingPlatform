@@ -8,6 +8,7 @@ from reservation.models import Reservation
 def payment_notification(sender, **kwargs):
     ipn_obj = sender
     print("Payment notification")
+    print(vars(ipn_obj))
     print(ipn_obj.payment_status)
     if ipn_obj.payment_status == ST_PP_COMPLETED:
         # payment finished with success

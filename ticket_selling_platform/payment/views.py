@@ -33,4 +33,5 @@ def payment_done(request):
 
 @csrf_exempt
 def payment_canceled(request):
-    return render(request, 'payment/canceled.html')
+    reservation_id = request.session.get('reservation_id')
+    return render(request, 'payment/canceled.html', {'reservation_id': reservation_id})

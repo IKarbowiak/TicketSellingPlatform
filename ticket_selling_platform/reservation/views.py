@@ -12,13 +12,13 @@ from .forms import ReservationForm, check_seats_availability, ReservationCheckFo
 from .models import Reservation, Client
 from ticket.models import Ticket
 
-row_length = 10
+
+ROW_LENGTH = 10
 
 
-# TODO: exclude reservation which have status PAID => remove others
 def remove_expired_reservations():
-    Reservation.objects.filter(booked_time__lte=timezone.now() - timedelta(minutes=15),
-                               status=Reservation.BOOKED).delete()
+    Reservation.objects.filter(booked_time__lte=timezone.now() - timedelta(minutes=15))\
+        .exclude(status=Reservation.PAID).delete()
 
 
 def prepare_seats_rows(ticket_types):
@@ -28,7 +28,7 @@ def prepare_seats_rows(ticket_types):
         ticket_data = []
         row = []
         for ticket in ticket_type.tickets.all():
-            if counter == row_length:
+            if counter == ROW_LENGTH:
                 counter = 0
                 ticket_data.append(row)
                 row = []

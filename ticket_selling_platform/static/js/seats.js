@@ -1,13 +1,14 @@
 $( document ).ready(function() {
-    console.log( "ready!" );
-    var chosen_seats = $("#id_chosen_seats").val().split(', ');
-    $("#id_chosen_seats").val("");
-    $("#tickets_counter").val(0);
-    for (var i = 0; i < chosen_seats.length; i++) {
-        changeclass($(`#${chosen_seats[i]}`));
-        console.log($(`#${chosen_seats[i]}`));
+    var chosen_seats = $("#id_chosen_seats").val();
+    if (chosen_seats !== undefined && chosen_seats !== "") {
+        chosen_seats = chosen_seats .split(', ');
+        $("#id_chosen_seats").val("");
+        $("#tickets_counter").val(0);
+        for (var i = 0; i < chosen_seats.length; i++) {
+            changeclass($(`#${chosen_seats[i]}`));
+            console.log($(`#${chosen_seats[i]}`));
+        }
     }
-    console.log(chosen_seats);
 });
 
 function changeclass(element) {
