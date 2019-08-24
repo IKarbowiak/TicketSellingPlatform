@@ -101,6 +101,10 @@ svg {
     border-color: green;
 }
 
+#warning {
+    color: red;
+}
+
 #header .res-check {
     font-family: 'Muli', sans-serif;
     float: right;

@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models import Count, Q, F, Sum
 from django.urls import reverse
 
+from event.models import Event
+
 
 class Client(models.Model):
     first_name = models.CharField(max_length=50)
@@ -22,6 +24,7 @@ class Reservation(models.Model):
     status = models.CharField(max_length=20, choices=RESERVATION_STATUS_CHOICES, default=BOOKED)
     booked_time = models.DateTimeField(auto_now_add=True)
     client = models.ForeignKey(Client, null=True, on_delete=models.CASCADE, related_name='reservations')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='reservations')
 
     def get_total_price(self):
         return sum(self.tickets.all().values_list('type__price', flat=True))

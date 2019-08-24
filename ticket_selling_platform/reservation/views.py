@@ -42,6 +42,12 @@ def prepare_seats_rows(ticket_types):
 def choose_tickets_panel(request, event_pk):
     remove_expired_reservations()
     event = get_object_or_404(Event, pk=event_pk)
+    if 'new_reservation' in request.session.keys():
+        old_reservation = Reservation.objects.filter(pk=request.session['new_reservation']).first()
+        if old_reservation:
+            old_reservation.delete()
+        del request.session['new_reservation']
+        
     if request.method == 'POST':
         form = ReservationForm(request.POST, event=event)
         if form.is_valid():
@@ -49,10 +55,11 @@ def choose_tickets_panel(request, event_pk):
             # double check if seats are still free
             taken_seats = check_seats_availability(cd, event)
             if not taken_seats:
-                reservation = Reservation.objects.create()
+                reservation = Reservation.objects.create(event=event)
                 seats_identifiers = cd['chosen_seats'].split(', ')
                 Ticket.objects.filter(seat_identifier__in=seats_identifiers)\
                     .update(reservation=reservation)
+                request.session['new_reservation'] = reservation.pk
                 return HttpResponseRedirect('/reservation/{}'.format(reservation.pk))
             # TODO: return some Error ?
     else:
@@ -90,6 +97,7 @@ def reservation_confirm(request, reservation_pk):
             reservation.status = Reservation.UNPAID
             reservation.save()
             request.session['reservation_id'] = reservation.pk
+            del request.session['new_reservation']
             return redirect(reverse('payment:process'))
 
     reservation_time = timezone.now() - reservation.booked_time
@@ -115,7 +123,7 @@ def reservation_confirmation(request, reservation_pk):
     if reservation.status != Reservation.PAID:
         return HttpResponseRedirect('/reservation/{}'.format(reservation.pk))
     details, total_price = reservation.get_reservation_details()
-    event = Ticket.objects.filter(reservation=reservation).first().type.event
+    event = reservation.event
     return render(request, 'reservation/reservation_confirmation.html', {'details': details,
                                                                          'total_price': total_price,
                                                                          'reservation_number': reservation.pk,
@@ -152,6 +160,6 @@ def reservation_check(request):
 
 def get_client_reservations(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
-    reservations = client.reservations.all()
+    reservations = client.reservations.all().order_by('-event__datetime', 'pk')
     return render(request, 'reservation/client_reservations.html', {'reservations': reservations})
 

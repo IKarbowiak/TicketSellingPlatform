@@ -21,7 +21,8 @@
                         {% else %}regular
                         {% endif %}"
                                value={{ticket.seat_identifier}} onclick="changeclass(this)"
-                        {% if ticket.reservation %}disabled{% endif %}>
+                        {% if ticket.reservation %}disabled{% endif %}
+                               id={{ticket.seat_identifier}}>
                     </div>
                 </td>
                 {% endfor %}

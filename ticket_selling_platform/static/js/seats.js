@@ -1,3 +1,15 @@
+$( document ).ready(function() {
+    console.log( "ready!" );
+    var chosen_seats = $("#id_chosen_seats").val().split(', ');
+    $("#id_chosen_seats").val("");
+    $("#tickets_counter").val(0);
+    for (var i = 0; i < chosen_seats.length; i++) {
+        changeclass($(`#${chosen_seats[i]}`));
+        console.log($(`#${chosen_seats[i]}`));
+    }
+    console.log(chosen_seats);
+});
+
 function changeclass(element) {
     var chosen_seats = $("#id_chosen_seats").val();
     var tickets_amount = parseInt($("#tickets_counter").val());
@@ -6,7 +18,10 @@ function changeclass(element) {
     var element_type = seat.charAt(0);
     var type_counter = parseInt($(`#${element_type}`).text());
 
-    if (jQuery(element).hasClass('chosen')) {
+    if (jQuery(element).hasClass('booked')){
+        $("#warning").val("Some seats have already been taken. Please choose another one.");
+    }
+    else if (jQuery(element).hasClass('chosen')) {
         $(element).removeClass('chosen');
         console.log("remove");
         if (chosen_seats.includes(seat)){
@@ -26,5 +41,5 @@ function changeclass(element) {
     $("#tickets_counter").val(tickets_amount);
     $("#id_chosen_seats").val(new_chosen_seats_value);
     $(`#${element_type}`).text(type_counter);
-};
+}
 
