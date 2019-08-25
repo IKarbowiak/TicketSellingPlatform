@@ -16,6 +16,7 @@ class EventListView(ListView):
 
     def get_queryset(self):
         remove_expired_reservations()
+        # TODO: only existing events
         queryset = Event.objects.filter(datetime__gte=timezone.now() - timedelta(days=5)) \
             .annotate(available_tickets=Count('ticket_types__tickets', distinct=True,
                                               filter=Q(ticket_types__tickets__reservation__isnull=True)))

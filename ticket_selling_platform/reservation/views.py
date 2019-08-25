@@ -68,7 +68,6 @@ def choose_tickets_panel(request, event_pk):
         .annotate(total=Count('tickets', distinct=True, filter=Q(tickets__reservation__isnull=True)))
 
     ticket_types_data = prepare_seats_rows(event.ticket_types.all())
-    print(form)
     return render(request, 'reservation/buy_tickets.html', {'event': event, 'free_tickets': free_tickets,
                                                             'form': form, 'tickets': ticket_types_data})
 
@@ -78,7 +77,7 @@ def reservation_confirm(request, reservation_pk):
     if not reservation:
         return HttpResponseRedirect('/')
     if reservation.status == Reservation.PAID:
-        return HttpResponseRedirect('/reservation-confirmation/{}'.format(reservation.id))
+        return HttpResponseRedirect('reservation/reservation-confirmation/{}'.format(reservation.id))
     if reservation.status == Reservation.UNPAID:
         request.session['reservation_id'] = reservation.pk
         return redirect(reverse('payment:process'))
@@ -103,9 +102,8 @@ def reservation_confirm(request, reservation_pk):
     reservation_time = timezone.now() - reservation.booked_time
     if reservation_time >= timedelta(minutes=15):
         reservation.delete()
-        return HttpResponseRedirect('/reservation-canceled/{}'.format(reservation.pk))
+        return HttpResponseRedirect('/reservation/reservation-canceled/{}'.format(reservation.pk))
 
-    print(form)
     left_time = re.match(r'\d+:(\d\d:\d\d).\d+', str(timedelta(minutes=15) - reservation_time)).group(1)
     tickets, total_price = reservation.get_reservation_details()
 
@@ -135,7 +133,7 @@ def reservation_canceled(request, reservation_pk):
     if not reservation:
         return HttpResponseRedirect('/')
     if reservation.status == Reservation.PAID:
-        return HttpResponseRedirect('/reservation-confirmation/{}'.format(reservation_pk))
+        return HttpResponseRedirect('/reservation/reservation-confirmation/{}'.format(reservation_pk))
     reservation_pk = reservation.pk
     reservation.delete()
     reservation.save()
@@ -146,20 +144,20 @@ def reservation_check(request):
     form = ReservationCheckForm()
     if request.method == 'POST':
         form = ReservationCheckForm(request.POST)
-        print(form.is_valid())
         if form.is_valid():
             cd = form.cleaned_data
             reservation_pk = cd['reservation_id']
             email = cd['email']
             if not reservation_pk:
                 client = Client.objects.get(email=email)
-                return HttpResponseRedirect('/client-reservations/{}'.format(client.pk))
-            return HttpResponseRedirect('/reservation-confirmation/{}'.format(reservation_pk))
+                return HttpResponseRedirect('/reservation/client-reservations/{}'.format(client.pk))
+            return HttpResponseRedirect('/reservation/reservation-confirmation/{}'.format(reservation_pk))
     return render(request, 'reservation/reservation_check.html', {'form': form})
 
 
 def get_client_reservations(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
+    # TODO: Show all? Or maybe only up to date reservations
     reservations = client.reservations.all().order_by('-event__datetime', 'pk')
     return render(request, 'reservation/client_reservations.html', {'reservations': reservations})
 
