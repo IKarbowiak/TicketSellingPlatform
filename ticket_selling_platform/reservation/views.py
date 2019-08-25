@@ -2,7 +2,7 @@ import re
 from datetime import timedelta
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Count, Q, F, Sum
+from django.db.models import Count, Q, F, Sum, Case, When, Value, BooleanField
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.urls import reverse
@@ -158,6 +158,9 @@ def reservation_check(request):
 def get_client_reservations(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
     # TODO: Show all? Or maybe only up to date reservations
-    reservations = client.reservations.all().order_by('-event__datetime', 'pk')
+    reservations = client.reservations.all().annotate(active=Case(When(event__datetime__lt=timezone.now(),
+                                                                       then=Value(False)),
+                                                                  default=Value(True), output_field=BooleanField()))\
+        .order_by('-event__datetime', 'pk')
     return render(request, 'reservation/client_reservations.html', {'reservations': reservations})
 

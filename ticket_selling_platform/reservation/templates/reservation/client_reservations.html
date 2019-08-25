@@ -7,6 +7,7 @@
         <tr>
             <th scope="col">Event name</th>
             <th scope="col">Event date</th>
+            <th scope="col">Active/Passed</th>
             <th scope="col">Tickets amount</th>
             <th scope="col">Reservation number</th>
             <th scope="col">Reservation status</th>
@@ -18,6 +19,7 @@
             <tr>
                 <td>{{ reservation.event.name }}</td>
                 <td>{{ reservation.event.datetime }}</td>
+                <td>{%  if reservation.active %}Active{% else %}Passed{% endif %}</td>
                 <td>{{reservation.tickets.count}}</td>
                 <td>{{ reservation.pk }}</td>
                 <td>{{ reservation.status }}</td>
