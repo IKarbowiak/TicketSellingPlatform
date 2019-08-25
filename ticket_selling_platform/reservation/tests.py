@@ -7,7 +7,7 @@ from django.urls import reverse
 from .models import Client, Reservation
 from event.models import Event
 from ticket.models import Ticket, TicketType
-
+from .views import remove_expired_reservations
 
 # TODO: finish the last two views functions
 
@@ -383,3 +383,90 @@ class ReservationConfirmViewTest(TestCase):
         self.assertEqual(response.context['total_price'], 20)
         self.assertEqual(response.context['reservation'].pk, r.pk)   
         # TODO: maybe check also left time?
+
+
+class ChooseTicketPanelViewTest(TestCase):
+    # TODO: finish => post method
+    def test_get_method_for_choose_ticket_panel(self):
+        # GIVEN
+        seats_number = 10
+        e = Event.objects.create(name='TestEvent', description='TestDescription',
+                                 datetime=timezone.now() + timedelta(days=2))
+
+        r1 = Reservation.objects.create(status=Reservation.PAID, event=e)
+        r2 = Reservation.objects.create(status=Reservation.BOOKED, event=e)
+        regular = TicketType.objects.create(event=e, price=10, type=TicketType.REGULAR, seats_number=seats_number)
+        premium = TicketType.objects.create(event=e, price=20, type=TicketType.PREMIUM, seats_number=seats_number)
+        vip = TicketType.objects.create(event=e, price=30, type=TicketType.VIP, seats_number=seats_number)
+        
+        for ticket_type in [regular, premium, vip]:
+            ticket_type.create_tickets()
+
+        regular_ticket = regular.tickets.first()
+        regular_ticket.reservation = r1
+        regular_ticket.save()
+        
+        vip_ticket = vip.tickets.first()
+        vip_ticket.reservation = r1
+        vip_ticket.save()
+        
+    
+        session = self.client.session
+        session['new_reservation'] = r2.pk
+        session.save()
+        
+        # WHEN
+        response = self.client.get('/reservation/buy-tickets/{}'.format(e.pk))
+        
+        # THEN
+        self.assertFalse(self.client.session.get('new_reservation'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['event'], e)
+        
+        free_tickets = {data['type']: {'price': data['price'], 'total': data['total']} for data in response.context['free_tickets']}
+        self.assertEqual(free_tickets, {'PREMIUM': {'price': 20, 'total': 10}, 
+                                        'REGULAR': {'price': 10, 'total': 9}, 
+                                        'VIP': {'price': 30, 'total': 9}})
+    
+    def test_404_response(self):
+        # WHEN
+        response = self.client.get('/reservation/buy-tickets/1')
+        
+        # THEN
+        self.assertEqual(response.status_code, 404)
+
+class AdditionalFunctionTest(TestCase):
+    
+    def test_remove_expire_reservation(self):
+        # GIVEN
+        e = Event.objects.create(name='TestEvent', description='TestDescription',
+                                 datetime=timezone.now() + timedelta(days=2))
+        
+        r1 = Reservation.objects.create(status=Reservation.BOOKED, event=e)
+        r1.booked_time = timezone.now() - timedelta(minutes=5)
+        r1.save()
+
+        r2 = Reservation.objects.create(status=Reservation.UNPAID, event=e)
+        r2.booked_time = timezone.now() - timedelta(minutes=10)
+        r2.save()
+
+        r3 = Reservation.objects.create(status=Reservation.PAID, event=e)
+        r3.booked_time = timezone.now() - timedelta(days=1)
+        r3.save()
+
+        r4 = Reservation.objects.create(status=Reservation.BOOKED, event=e)
+        r4.booked_time = timezone.now() - timedelta(minutes=16)
+        r4.save()
+    
+        r5 = Reservation.objects.create(status=Reservation.UNPAID, event=e)
+        r5.booked_time = timezone.now() - timedelta(minutes=20)
+        r5.save()
+
+        
+        # WHEN
+        remove_expired_reservations()
+        
+        # THEN
+        self.assertEqual(Reservation.objects.all().count(), 3)
+        self.assertSetEqual(set(Reservation.objects.all().values_list('pk', flat=True).distinct()),
+                            {r1.pk, r2.pk, r3.pk})

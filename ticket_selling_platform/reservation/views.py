@@ -106,7 +106,6 @@ def reservation_confirm(request, reservation_pk):
 
     left_time = re.match(r'\d+:(\d\d:\d\d).\d+', str(timedelta(minutes=15) - reservation_time)).group(1)
     tickets, total_price = reservation.get_reservation_details()
-
     return render(request, 'reservation/reservation_confirm.html', {'reservation': reservation,
                                                                     'left_time': left_time,
                                                                     'tickets': tickets,
@@ -122,9 +121,11 @@ def reservation_confirmation(request, reservation_pk):
         return HttpResponseRedirect('/reservation/{}'.format(reservation.pk))
     details, total_price = reservation.get_reservation_details()
     event = reservation.event
+    seats = ', '.join(reservation.tickets.all().order_by('seat_identifier').values_list('seat_identifier', flat=True))
     return render(request, 'reservation/reservation_confirmation.html', {'details': details,
                                                                          'total_price': total_price,
                                                                          'reservation_number': reservation.pk,
+                                                                         'seats': seats,
                                                                          'event': event})
 
 
