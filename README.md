@@ -35,12 +35,12 @@ Now we are ready to run our server. Go to *ticket_selling_platform/* directory a
 ```
 $ python manage.py runserver
 ```
-Default port for localhost server is **8000**, but you can use customize it. For example to run server on 7000 port you should use:
+Default port for localhost server is **8000**, but you can use customize it. For example to run server on **7000** port you should use:
 ```
 $ python manage.py runserver 7000
 ```
 
-After that got to http://127.0.0.1:8000/ (or http://127.0.0.1:7000/ if you use port 7000) in your web browser. The application is almost ready to use...
+After that go to http://127.0.0.1:8000/ (or http://127.0.0.1:7000/ if you use port 7000) in your web browser. The application is almost ready to use...
 
 ### Adjust ngrok
 For integration with paypal (receiving IPN - instatnt payment notification) application must be publicly accessible. It can be done with use of ngrok, which create secure URL for localhost server just with one commend.
