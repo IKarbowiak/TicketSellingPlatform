@@ -1,5 +1,3 @@
-from string import ascii_uppercase
-
 from django.db import models
 
 from reservation.models import Reservation
