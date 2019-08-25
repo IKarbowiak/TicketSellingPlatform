@@ -114,6 +114,10 @@ svg {
     margin-right: 10%;
 }
 
+.card-text {
+    padding-top: 4%;
+}
+
 p {
     line-height: 1.8;
 }

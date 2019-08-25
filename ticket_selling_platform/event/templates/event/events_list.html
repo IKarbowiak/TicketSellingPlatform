@@ -11,6 +11,7 @@ Events list
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">{{event.name}}</h4>
+                <strong>{{ event.datetime }}</strong>
                 <p class="card-text">{{event.description}}</p>
                 <P><strong>Available tickets {{event.available_tickets}}</strong></P>
                 <a href="{% url "reservation:buy_tickets" event.pk %}"
