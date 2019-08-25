@@ -54,6 +54,7 @@ replace **8000** with your port number if you do not use default one.
 The last step is changing **ALLOWED_HOSTS** in application settings. Without that the app will not work. Open *settings.py* file which you can find in *ticket_selling_platform/* directory, find **ALLOWED_HOSTS** parameter and change element with *ngrok.io* part to value from ngrok panel. It should looks like *8a9d924d.ngrok.io*.
 
 And thats all. Now the app can receive paypal notifications.
+
 ***Remember to use URL form ngrok to make payments (for example http://104f3ae4.ngrok.io), otherwise IPN signals will be not received.***
 
 ## Payment 

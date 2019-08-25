@@ -77,7 +77,7 @@ def reservation_confirm(request, reservation_pk):
     if not reservation:
         return HttpResponseRedirect('/')
     if reservation.status == Reservation.PAID:
-        return HttpResponseRedirect('reservation/reservation-confirmation/{}'.format(reservation.id))
+        return HttpResponseRedirect('/reservation/reservation-confirmation/{}'.format(reservation.id))
     if reservation.status == Reservation.UNPAID:
         request.session['reservation_id'] = reservation.pk
         return redirect(reverse('payment:process'))
