@@ -9,7 +9,7 @@ from event.models import Event
 from ticket.models import Ticket, TicketType
 from .views import remove_expired_reservations
 
-# TODO: finish the last two views functions
+# TODO: maybe add tests for prepare_seats_rows
 
 
 class ReservationConfirmationTest(TestCase):
@@ -492,6 +492,7 @@ class ChooseTicketPanelViewTest(TestCase):
         
         # THEN
         self.assertEqual(response.status_code, 404)
+
 
 class AdditionalFunctionTest(TestCase):
     

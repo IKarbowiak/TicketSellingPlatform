@@ -19,5 +19,6 @@ class EventListView(ListView):
         # TODO: only existing events
         queryset = Event.objects.filter(datetime__gte=timezone.now()) \
             .annotate(available_tickets=Count('ticket_types__tickets', distinct=True,
-                                              filter=Q(ticket_types__tickets__reservation__isnull=True)))
+                                              filter=Q(ticket_types__tickets__reservation__isnull=True)))\
+            .order_by('datetime')
         return queryset
