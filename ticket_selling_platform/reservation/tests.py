@@ -386,7 +386,7 @@ class ReservationConfirmViewTest(TestCase):
 
 
 class ChooseTicketPanelViewTest(TestCase):
-    # TODO: finish => post method
+
     def test_get_method_for_choose_ticket_panel(self):
         # GIVEN
         seats_number = 10
@@ -428,6 +428,64 @@ class ChooseTicketPanelViewTest(TestCase):
                                         'REGULAR': {'price': 10, 'total': 9}, 
                                         'VIP': {'price': 30, 'total': 9}})
     
+    def test_get_post_for_choose_ticket_panel(self):
+        # GIVEN
+        seats_number = 10
+        e = Event.objects.create(name='TestEvent', description='TestDescription',
+                                 datetime=timezone.now() + timedelta(days=2))
+
+        regular = TicketType.objects.create(event=e, price=10, type=TicketType.REGULAR, seats_number=seats_number)
+        premium = TicketType.objects.create(event=e, price=20, type=TicketType.PREMIUM, seats_number=seats_number)
+        vip = TicketType.objects.create(event=e, price=30, type=TicketType.VIP, seats_number=seats_number)
+
+        for ticket_type in [regular, premium, vip]:
+            ticket_type.create_tickets()
+
+
+        # WHEN
+        response = self.client.post('/reservation/buy-tickets/{}'.format(e.pk), 
+                                    {'chosen_seats': ', '.join([regular.tickets.first().seat_identifier,
+                                                               premium.tickets.first().seat_identifier, 
+                                                               vip.tickets.first().seat_identifier,])})
+
+        # THEN
+        reservation = Reservation.objects.all().first()
+        self.assertTrue(reservation)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/reservation/{}'.format(reservation.pk))
+
+    def test_get_post_for_already_taken_seat(self):
+        seats_number = 10
+        e = Event.objects.create(name='TestEvent', description='TestDescription',
+                                 datetime=timezone.now() + timedelta(days=2))
+
+        r1 = Reservation.objects.create(status=Reservation.PAID, event=e)
+        r2 = Reservation.objects.create(status=Reservation.BOOKED, event=e)
+        regular = TicketType.objects.create(event=e, price=10, type=TicketType.REGULAR, seats_number=seats_number)
+        premium = TicketType.objects.create(event=e, price=20, type=TicketType.PREMIUM, seats_number=seats_number)
+        vip = TicketType.objects.create(event=e, price=30, type=TicketType.VIP, seats_number=seats_number)
+
+        for ticket_type in [regular, premium, vip]:
+            ticket_type.create_tickets()
+
+        regular_ticket = regular.tickets.first()
+        regular_ticket.reservation = r1
+        regular_ticket.save()
+
+        vip_ticket = vip.tickets.first()
+        vip_ticket.reservation = r1
+        vip_ticket.save()
+
+        # WHEN
+        response = self.client.post('/reservation/buy-tickets/{}'.format(e.pk),
+                                    {'chosen_seats': ', '.join([regular_ticket.seat_identifier,
+                                                                premium.tickets.first().seat_identifier,
+                                                                vip.tickets.last().seat_identifier,])})
+
+        # THEN
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'reservation/buy_tickets.html')
+
     def test_404_response(self):
         # WHEN
         response = self.client.get('/reservation/buy-tickets/1')
