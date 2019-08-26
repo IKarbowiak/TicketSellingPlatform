@@ -20,11 +20,12 @@ body {
     padding-right: 1%;
 }
 
+.left-time{
+    padding-top: 1%;
+}
+
 .form {
     margin-top: 5%;
-    /*display: flex;*/
-    /*align-items: center;*/
-    /*justify-content: center;*/
 }
 
 .pagination {
@@ -57,11 +58,6 @@ svg {
 .seat {
     height: 50px !important;;
     width: 50px !important;
-}
-
-.booked:disabled, .booked {
-    background-color: #a6a6a6 !important;
-    border-color: black !important;
 }
 
 .time-left {
@@ -111,6 +107,12 @@ svg {
     background-color: #295c35 !important;
     border-color: #295c35 !important;
 }
+
+.booked:disabled, .booked {
+    background-color: #a6a6a6 !important;
+    border-color: black !important;
+}
+
 
 
 #warning {

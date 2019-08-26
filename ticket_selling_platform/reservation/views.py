@@ -21,6 +21,15 @@ def remove_expired_reservations():
         .exclude(status=Reservation.PAID).delete()
 
 
+def get_reservation_left_time(reservation):
+    reservation_time = timezone.now() - reservation.booked_time
+    if reservation_time >= timedelta(minutes=15):
+        return None
+
+    left_time = re.match(r'\d+:(\d\d:\d\d).\d+', str(timedelta(minutes=15) - reservation_time)).group(1)
+    return left_time
+
+
 def prepare_seats_rows(event):
     ticket_types = event.tickets.all().order_by('-type__price').values('type__type', 'type__price').distinct()
     ticket_types_data = []
@@ -101,12 +110,11 @@ def reservation_confirm(request, reservation_pk):
             del request.session['new_reservation']
             return redirect(reverse('payment:process'))
 
-    reservation_time = timezone.now() - reservation.booked_time
-    if reservation_time >= timedelta(minutes=15):
+    left_time = get_reservation_left_time(reservation)
+    if not left_time:
         reservation.delete()
         return HttpResponseRedirect('/reservation/reservation-canceled/{}'.format(reservation.pk))
 
-    left_time = re.match(r'\d+:(\d\d:\d\d).\d+', str(timedelta(minutes=15) - reservation_time)).group(1)
     tickets, total_price = reservation.get_reservation_details()
     return render(request, 'reservation/reservation_confirm.html', {'reservation': reservation,
                                                                     'left_time': left_time,

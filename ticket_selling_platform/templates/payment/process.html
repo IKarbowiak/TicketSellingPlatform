@@ -3,5 +3,7 @@
 {% block title %}Payment{% endblock %}
 {% block content %}
     <h3>Pay with Paypal</h3>
+    <h4 class="left-time">Time left to buy tickets:</h4>
+    <h3 class="timer">{{left_time}}</h3>
     {{ form.render }}
 {% endblock %}s
