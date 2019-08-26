@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Payment not completed correctly{% endblock %}
+{% block content %}
+    <h3>Payment not finished correctly</h3>
+    <a href="{%  url "reservation:reservation" reservation_pk=reservation_id %}"
+       role="button" class="btn btn-outline-secondary">Go back to payment site</a>
+    <a href="/" class="btn btn-outline-success" role="button">Go to main page</a>
+{% endblock %}s
