@@ -16,15 +16,13 @@ class TicketType(models.Model):
 
     type = models.CharField(max_length=20, choices=TICKET_TYPES)
     price = models.PositiveIntegerField()
-    seats_number = models.PositiveIntegerField()
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='ticket_types')
 
-    def create_tickets(self):
-        for seat in range(1, self.seats_number + 1):
-            Ticket.objects.create(seat_identifier='{}{}'.format(self.type[0], seat), type=self)
+    def create_tickets(self, event, ticket_amount):
+        for seat in range(1, ticket_amount + 1):
+            Ticket.objects.create(seat_identifier='{}{}'.format(self.type[0], seat), type=self, event=event)
 
     def __str__(self):
-        return '{}, {} seats'.format(self.type, self.seats_number)
+        return '{}, {} price'.format(self.type, self.price)
 
 
 class Ticket(models.Model):
@@ -32,6 +30,7 @@ class Ticket(models.Model):
     reservation = models.ForeignKey(Reservation, on_delete=models.SET_NULL, null=True,
                                     related_name='tickets')
     type = models.ForeignKey(TicketType, on_delete=models.CASCADE, related_name='tickets')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')
 
     def __str__(self):
         return 'SEAT: {}'.format(self.seat_identifier)

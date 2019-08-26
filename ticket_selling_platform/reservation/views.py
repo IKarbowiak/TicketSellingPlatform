@@ -21,13 +21,14 @@ def remove_expired_reservations():
         .exclude(status=Reservation.PAID).delete()
 
 
-def prepare_seats_rows(ticket_types):
+def prepare_seats_rows(event):
+    ticket_types = event.tickets.all().order_by('-type__price').values('type__type', 'type__price').distinct()
     ticket_types_data = []
-    for ticket_type in ticket_types.order_by('-price'):
+    for ticket_type in ticket_types:
         counter = 0
         ticket_data = []
         row = []
-        for ticket in ticket_type.tickets.all():
+        for ticket in event.tickets.filter(type__type=ticket_type['type__type']):
             if counter == ROW_LENGTH:
                 counter = 0
                 ticket_data.append(row)
@@ -35,7 +36,8 @@ def prepare_seats_rows(ticket_types):
             row.append(ticket)
             counter += 1
         ticket_data.append(row)
-        ticket_types_data.append({'type': ticket_type.type, 'price': ticket_type.price, 'tickets': ticket_data})
+        ticket_types_data.append({'type': ticket_type['type__type'], 'price': ticket_type['type__price'],
+                                  'tickets': ticket_data})
     return ticket_types_data
 
 
@@ -64,10 +66,10 @@ def choose_tickets_panel(request, event_pk):
             # TODO: return some Error ?
     else:
         form = ReservationForm(event=event)
-    free_tickets = event.ticket_types.all().values('type', 'price') \
-        .annotate(total=Count('tickets', distinct=True, filter=Q(tickets__reservation__isnull=True)))
+    free_tickets = event.tickets.all().values('type__type', 'type__price') \
+        .annotate(total=Count('pk', distinct=True, filter=Q(reservation__isnull=True)))
 
-    ticket_types_data = prepare_seats_rows(event.ticket_types.all())
+    ticket_types_data = prepare_seats_rows(event)
     return render(request, 'reservation/buy_tickets.html', {'event': event, 'free_tickets': free_tickets,
                                                             'form': form, 'tickets': ticket_types_data})
 
