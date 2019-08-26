@@ -9,18 +9,18 @@ from event.models import Event
 from ticket.models import Ticket, TicketType
 
 
-# TODO: maybe add tests for prepare_seats_rows
-
-
 class ReservationConfirmationTest(TestCase):
 
-    # TODO: check also context
     def test_reservation_confirmation_correct_template(self):
         # GIVEN
         c = Client.objects.create(first_name='TestClientName', last_name='TestClientLastName', email='test@email.com')
         e = Event.objects.create(name='TestEvent', description='TestDescription',
                                  datetime=timezone.now() + timedelta(days=2))
         r = Reservation.objects.create(status=Reservation.PAID, client=c, event=e)
+        vip_type = TicketType.objects.create(type=TicketType.VIP, price=10)
+        t1 = Ticket.objects.create(seat_identifier='TestIdentifier1', type=vip_type, event=e, reservation=r)
+        t2 = Ticket.objects.create(seat_identifier='TestIdentifier2', type=vip_type, event=e, reservation=r)
+        t3 = Ticket.objects.create(seat_identifier='TestIdentifier3', type=vip_type, event=e)
 
         # WHEN
         response = self.client.get('/reservation/reservation-confirmation/{}'.format(r.pk))
@@ -28,6 +28,13 @@ class ReservationConfirmationTest(TestCase):
         # THEN
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'reservation/reservation_confirmation.html')
+        self.assertEqual(len(response.context['tickets']), 1)
+        self.assertDictEqual(response.context['tickets'][0],
+                             {'ticket_type': 'VIP', 'price': 10, 'amount': 2, 'total_price': 20})
+        self.assertEqual(response.context['total_price'], 20)
+        self.assertEqual(response.context['reservation_number'], r.pk)
+        self.assertEqual(response.context['seats'], '{}, {}'.format(t1.seat_identifier, t2.seat_identifier))
+        self.assertEqual(response.context['event'], e)
 
     def test_reservation_confirmation_for_unpaid_reservation(self):
         # GIVEN
@@ -55,7 +62,6 @@ class ReservationConfirmationTest(TestCase):
 
 class ReservationCanceledViewTest(TestCase):
 
-    # TODO: check also context
     def test_reservation_canceled_correct_template(self):
         # GIVEN
         c = Client.objects.create(first_name='TestClientName', last_name='TestClientLastName', email='test@email.com')
@@ -71,6 +77,7 @@ class ReservationCanceledViewTest(TestCase):
         self.assertTrue(response.status_code, 200)
         self.assertTemplateUsed(response, 'reservation/reservation_canceled.html')
         self.assertFalse(Reservation.objects.filter(pk=res_pk))
+        self.assertEqual(response.context['reservation_pk'], r.pk)
 
     def test_reservation_canceled_for_paid_reservation(self):
         # GIVEN
@@ -367,7 +374,7 @@ class ReservationConfirmViewTest(TestCase):
                              [{'ticket_type': 'VIP', 'price': 10, 'amount': 2, 'total_price': 20}])
         self.assertEqual(response.context['total_price'], 20)
         self.assertEqual(response.context['reservation'].pk, r.pk)
-        # TODO: maybe check also left time?
+        self.assertTrue(int(response.context['left_time'].split(':')[0]) > 0)
 
 
 class ChooseTicketPanelViewTest(TestCase):
