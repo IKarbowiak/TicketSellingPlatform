@@ -8,7 +8,7 @@
     <strong>Event time: </strong><p>{{event.datetime}}</p>
     <strong>Available tickets: </strong><br>
     {% for ticket_type in free_tickets %}
-    {{ticket_type.type__type}}: <span id="{{ticket_type.type|slice:1}}">{{ticket_type.total}}</span>
+    {{ticket_type.type__type}}: <span id="{{ticket_type.type__type|slice:1}}">{{ticket_type.total}}</span>
     {% endfor %}
     <div class="form">
         <form action="" method="post">
