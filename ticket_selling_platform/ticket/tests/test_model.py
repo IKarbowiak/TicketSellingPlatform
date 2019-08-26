@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.test import TestCase
 from django.utils import timezone
 
-from .models import TicketType
+from ..models import TicketType
 from event.models import Event
 
 
