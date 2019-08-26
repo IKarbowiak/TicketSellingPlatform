@@ -24,7 +24,7 @@ SECRET_KEY = 'myynflbz^cr*1vb9(wuqyvv7)d+9@&#dv5704d$0s7qcy1q0f_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['8a9d924d.ngrok.io', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -58,7 +58,7 @@ ROOT_URLCONF = 'ticket_selling_platform.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

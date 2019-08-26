@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Event
+from event.models import Event
 
 
 class EventListViewTest(TestCase):
@@ -35,5 +35,3 @@ class EventListViewTest(TestCase):
         events = response.context['events']
         self.assertEqual(len(events), 2)
         self.assertSetEqual({event.name for event in events}, {'TestEvent1', 'TestEvent2'})
-
-
