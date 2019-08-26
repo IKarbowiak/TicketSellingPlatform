@@ -59,7 +59,7 @@ def choose_tickets_panel(request, event_pk):
             if not taken_seats:
                 reservation = Reservation.objects.create(event=event)
                 seats_identifiers = cd['chosen_seats'].split(', ')
-                Ticket.objects.filter(seat_identifier__in=seats_identifiers)\
+                Ticket.objects.filter(seat_identifier__in=seats_identifiers, event=event)\
                     .update(reservation=reservation)
                 request.session['new_reservation'] = reservation.pk
                 return HttpResponseRedirect('/reservation/{}'.format(reservation.pk))
