@@ -60,7 +60,7 @@ svg {
 }
 
 .booked:disabled, .booked {
-    background-color: darkred !important;
+    background-color: #a6a6a6 !important;
     border-color: black !important;
 }
 
@@ -82,25 +82,36 @@ svg {
 }
 
 .vip {
-    background-color: #D35400   !important;
-    border-color: #D35400   !important;
+    background-color: #ffd96a !important;
+    border-color: #ffd96a !important;
 }
 
 .premium {
-    background-color: #F39C12  !important;
-    border-color: #F39C12  !important;
+    background-color: #5cbdcd  !important;
+    border-color: #5cbdcd  !important;
 }
 
 .regular{
-    background-color: #F7DC6F !important;
-    border-color: #F7DC6F !important;
+    background-color: #52b86a !important;
+    border-color: #52b86a !important;
 }
 
 
-.chosen {
-    background-color: green !important;
-    border-color: green;
+.vip.chosen {
+    background-color: #e5ad06 !important;
+    border-color: #e5ad06 !important;
 }
+
+.premium.chosen {
+    background-color: #0d616e !important;
+    border-color: #0d616e !important;
+}
+
+.regular.chosen {
+    background-color: #295c35 !important;
+    border-color: #295c35 !important;
+}
+
 
 #warning {
     color: red;
