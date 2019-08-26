@@ -52,7 +52,7 @@ Firstly open *ngrok.exe* and then use this commend to create tunel:
 ```
 replace **8000** with your port number if you do not use default one.
 
-### For linux
+#### For linux
 Go to repository directory and just run:
 ```
 $ ./ngrok http 8000
