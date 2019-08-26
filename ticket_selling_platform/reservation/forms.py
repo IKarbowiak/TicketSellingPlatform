@@ -7,7 +7,7 @@ from .models import Reservation, Client
 def check_seats_availability(cleaned_data, event):
     chosen_seats = cleaned_data['chosen_seats']
     chosen_seats_set = set(chosen_seats.split(', '))
-    available_tickets = set(event.get_all_tickets().filter(reservation__isnull=True) \
+    available_tickets = set(event.tickets.all().filter(reservation__isnull=True) \
                             .values_list('seat_identifier', flat=True).distinct())
 
     already_taken_tickets = chosen_seats_set.difference(available_tickets)
@@ -69,6 +69,6 @@ class ReservationCheckForm(forms.Form):
 
 
 class ClientForm(forms.Form):
-    first_name = forms.CharField(max_length=50)
+    first_name = forms.CharField(max_length=50, error_messages={'required': 'Please fill this field'})
     last_name = forms.CharField(max_length=50)
     email = forms.EmailField()

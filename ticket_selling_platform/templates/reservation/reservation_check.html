@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Reservation check{% endblock %}
+{% block content %}
+<h3>To see your reservations enter reservation number or email address:</h3>
+<div class="res-check-form">
+    <form lang="es" action="" method="post">
+        {{ form.as_p }}
+        <input type="submit" class="btn" value="Check">
+        {%  csrf_token %}
+    </form>
+</div>
+
+
+{% endblock %}

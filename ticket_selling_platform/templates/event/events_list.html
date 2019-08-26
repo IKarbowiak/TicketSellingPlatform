@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+Events list
+{% endblock %}
+
+{% block content %}
+<div class="row">
+{% for event in events %}
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{{event.name}}</h4>
+                <strong>{{ event.datetime }}</strong>
+                <p class="card-text" align=" justify">{{event.description}}</p>
+                <P><strong>Available tickets {{event.available_tickets}}</strong></P>
+                <a href="{% url "reservation:buy_tickets" event.pk %}"
+                   class="btn btn-success {% if not event.available_tickets%}disabled{% endif %}"
+                   role="button"
+                   {% if not event.available_tickets%}aria-disabled="true"{% endif %}>Book tickets</a>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+ {% include "pagination.html" with page=page_obj %}
+{% endblock %}

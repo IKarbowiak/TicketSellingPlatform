@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Your reservations{% endblock %}
+{% block content %}
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Event name</th>
+            <th scope="col">Event date</th>
+            <th scope="col">Active/Passed</th>
+            <th scope="col">Tickets amount</th>
+            <th scope="col">Reservation number</th>
+            <th scope="col">Reservation status</th>
+            <th scope="col">Go to reservation details</th>
+        </tr>
+        </thead>
+        <tbody>
+        {%  for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.event.name }}</td>
+                <td>{{ reservation.event.datetime }}</td>
+                <td>{%  if reservation.active %}Active{% else %}Passed{% endif %}</td>
+                <td>{{reservation.tickets.count}}</td>
+                <td>{{ reservation.pk }}</td>
+                <td>{{ reservation.status }}</td>
+                <td><a href="{{ reservation.get_absolute_url }}">See reservation</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

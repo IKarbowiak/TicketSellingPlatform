@@ -11,6 +11,7 @@ body {
 
 .card{
     margin-top: 5%;
+    height: 450px;
 }
 
 .event-desc {
@@ -19,11 +20,12 @@ body {
     padding-right: 1%;
 }
 
+.left-time{
+    padding-top: 1%;
+}
+
 .form {
     margin-top: 5%;
-    /*display: flex;*/
-    /*align-items: center;*/
-    /*justify-content: center;*/
 }
 
 .pagination {
@@ -58,11 +60,6 @@ svg {
     width: 50px !important;
 }
 
-.booked:disabled, .booked {
-    background-color: darkred !important;
-    border-color: black !important;
-}
-
 .time-left {
     float: left;
 }
@@ -81,25 +78,42 @@ svg {
 }
 
 .vip {
-    background-color: #D35400   !important;
-    border-color: #D35400   !important;
+    background-color: #ffd96a !important;
+    border-color: #ffd96a !important;
 }
 
 .premium {
-    background-color: #F39C12  !important;
-    border-color: #F39C12  !important;
+    background-color: #5cbdcd  !important;
+    border-color: #5cbdcd  !important;
 }
 
 .regular{
-    background-color: #F7DC6F !important;
-    border-color: #F7DC6F !important;
+    background-color: #52b86a !important;
+    border-color: #52b86a !important;
 }
 
 
-.chosen {
-    background-color: green !important;
-    border-color: green;
+.vip.chosen {
+    background-color: #e5ad06 !important;
+    border-color: #e5ad06 !important;
 }
+
+.premium.chosen {
+    background-color: #0d616e !important;
+    border-color: #0d616e !important;
+}
+
+.regular.chosen {
+    background-color: #295c35 !important;
+    border-color: #295c35 !important;
+}
+
+.booked:disabled, .booked {
+    background-color: #a6a6a6 !important;
+    border-color: black !important;
+}
+
+
 
 #warning {
     color: red;
@@ -112,6 +126,10 @@ svg {
     font-size: 15px;
     padding-top: 5px;
     margin-right: 10%;
+}
+
+.card-text {
+    padding-top: 4%;
 }
 
 p {

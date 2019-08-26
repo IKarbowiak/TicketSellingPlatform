@@ -6,9 +6,5 @@ class Event(models.Model):
     datetime = models.DateTimeField()
     description = models.TextField()
 
-    def get_all_tickets(self):
-        types = self.ticket_types.all()
-        tickets = types[0].tickets.all()
-        for ticket_type in types:
-            tickets = tickets | ticket_type.tickets.all()
-        return tickets.distinct()
+    def __str__(self):
+        return self.name

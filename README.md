@@ -45,13 +45,18 @@ After that go to http://127.0.0.1:8000/ (or http://127.0.0.1:7000/ if you use po
 ### Adjust ngrok
 For integration with paypal (receiving IPN - instatnt payment notification) application must be publicly accessible. It can be done with use of ngrok, which create secure URL for localhost server just with one commend.
 
+#### For windows
 Firstly open *ngrok.exe* and then use this commend to create tunel:
 ```
 > ngrok http 8000
 ```
 replace **8000** with your port number if you do not use default one.
 
-The last step is changing **ALLOWED_HOSTS** in application settings. Without that the app will not work. Open *settings.py* file which you can find in *ticket_selling_platform/* directory, find **ALLOWED_HOSTS** parameter and change element with *ngrok.io* part to value from ngrok panel. It should looks like *8a9d924d.ngrok.io*.
+#### For linux
+Go to repository directory and just run:
+```
+$ ./ngrok http 8000
+```
 
 And thats all. Now the app can receive paypal notifications.
 
