@@ -57,6 +57,7 @@ Go to repository directory and just run:
 ```
 $ ./ngrok http 8000
 ```
+replace **8000** with your port number if you do not use default one.
 
 And thats all. Now the app can receive paypal notifications.
 

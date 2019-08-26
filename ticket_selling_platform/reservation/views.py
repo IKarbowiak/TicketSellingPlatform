@@ -72,7 +72,6 @@ def choose_tickets_panel(request, event_pk):
                     .update(reservation=reservation)
                 request.session['new_reservation'] = reservation.pk
                 return HttpResponseRedirect('/reservation/{}'.format(reservation.pk))
-            # TODO: return some Error ?
     else:
         form = ReservationForm(event=event)
     free_tickets = event.tickets.all().values('type__type', 'type__price') \
@@ -168,7 +167,6 @@ def reservation_check(request):
 
 def get_client_reservations(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
-    # TODO: Show all? Or maybe only up to date reservations
     reservations = client.reservations.all().annotate(active=Case(When(event__datetime__lt=timezone.now(),
                                                                        then=Value(False)),
                                                                   default=Value(True), output_field=BooleanField()))\

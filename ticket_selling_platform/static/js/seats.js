@@ -6,7 +6,6 @@ $( document ).ready(function() {
         $("#tickets_counter").val(0);
         for (var i = 0; i < chosen_seats.length; i++) {
             changeclass($(`#${chosen_seats[i]}`));
-            console.log($(`#${chosen_seats[i]}`));
         }
     }
 });
@@ -24,7 +23,6 @@ function changeclass(element) {
     }
     else if (jQuery(element).hasClass('chosen')) {
         $(element).removeClass('chosen');
-        console.log("remove");
         if (chosen_seats.includes(seat)){
             new_chosen_seats_value  = chosen_seats.replace(seat, '').replace(/,\s*$|^,/, "").replace(/,\s,\s*/, ", ");;
         }
@@ -33,7 +31,6 @@ function changeclass(element) {
     }
     else {
         $(element).addClass('chosen');
-        console.log(chosen_seats);
         new_chosen_seats_value = chosen_seats.trim().length == 0 ? seat : (chosen_seats + ', ' + seat);
 
         tickets_amount ++;
