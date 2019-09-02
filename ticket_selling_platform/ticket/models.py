@@ -14,7 +14,7 @@ class TicketType(models.Model):
         (VIP, 'VIP'),
     ]
 
-    type = models.CharField(max_length=20, choices=TICKET_TYPES)
+    ticket_type = models.CharField(max_length=20, choices=TICKET_TYPES)
     price = models.PositiveIntegerField()
 
     def create_tickets(self, event, ticket_amount):
@@ -29,7 +29,7 @@ class Ticket(models.Model):
     seat_identifier = models.CharField(max_length=10)
     reservation = models.ForeignKey(Reservation, on_delete=models.SET_NULL, null=True,
                                     related_name='tickets')
-    type = models.ForeignKey(TicketType, on_delete=models.CASCADE, related_name='tickets')
+    ticket_type = models.ForeignKey(TicketType, on_delete=models.CASCADE, related_name='tickets')
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')
 
     def __str__(self):

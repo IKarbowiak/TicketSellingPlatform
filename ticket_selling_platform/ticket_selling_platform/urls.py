@@ -26,6 +26,3 @@ urlpatterns = [
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('', include(('event.urls', 'event'), namespace='event')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-# if settings.DEBUG:
-#     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
